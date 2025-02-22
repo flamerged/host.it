@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :invitations_as_receiver, class_name: "Invitation", foreign_key: "receiver_id"
   has_many :events
   has_many :items
-  serialize :spotify_login
+  serialize :spotify_login, coder: JSON
 
   has_one_attached :avatar
 
