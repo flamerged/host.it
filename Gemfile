@@ -22,6 +22,12 @@ gem "redis"
 gem "sidekiq"
 gem "rake"
 
+gem 'geocoder'
+gem 'mapbox-gl-rails'
+gem 'faker'
+gem 'cloudinary'
+gem 'rspotify'
+gem 'devise'
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
