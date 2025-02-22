@@ -54,7 +54,8 @@ jobs:
           bundler-cache: true
 
       - name: Run Rubocop for code style
-        run: bin/rubocop -f github || echo "Rubocop completed with warnings"
+        run: bin/rubocop -f github
+        continue-on-error: true
 
   build:
     name: Build Check
