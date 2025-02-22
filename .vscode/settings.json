@@ -16,5 +16,8 @@
     "titleBar.activeBackground": "#2D1A4A",
     "titleBar.activeForeground": "#ffffff",
     "panel.background": "#2D1A4A"
+  },
+  "[ruby]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
