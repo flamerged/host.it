@@ -40,3 +40,12 @@ yarn-debug.log*
 *.swp
 .DS_Store
 .env*
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+.yarn/install-state.gz
