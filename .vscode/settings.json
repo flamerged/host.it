@@ -1,0 +1,20 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "yaml.format.enable": true,
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#2D1A4A",
+    "activityBar.foreground": "#ffffff",
+    "statusBar.background": "#2D1A4A",
+    "statusBar.foreground": "#ffffff",
+    "titleBar.activeBackground": "#2D1A4A",
+    "titleBar.activeForeground": "#ffffff",
+    "panel.background": "#2D1A4A"
+  }
+}

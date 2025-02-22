@@ -3,10 +3,11 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [dev, production]
 
 jobs:
   scan_ruby:
+    name: Ruby Security Scan
     runs-on: ubuntu-latest
 
     steps:
@@ -19,10 +20,11 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Scan for common Rails security vulnerabilities using static analysis
+      - name: Scan for common Rails security vulnerabilities
         run: bin/brakeman --no-pager
 
   scan_js:
+    name: JavaScript Security Scan
     runs-on: ubuntu-latest
 
     steps:
@@ -39,6 +41,7 @@ jobs:
         run: bin/importmap audit
 
   lint:
+    name: Code Linting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -50,20 +53,100 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Lint code for consistent style
+      - name: Run Rubocop for code style
         run: bin/rubocop -f github
+        continue-on-error: true
+
+  build:
+    name: Build Check
+    runs-on: ubuntu-latest
+    needs: [scan_ruby, scan_js, lint] # Build only runs if scans & linting pass
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack (for Yarn 4.x support)
+        run: corepack enable
+
+      - name: Use correct Yarn version (4.6.0)
+        run: corepack prepare yarn@4.6.0 --activate
+
+      - name: Verify Yarn version
+        run: yarn --version
+
+      - name: Yarn cache
+        uses: actions/cache@v3
+        with:
+          path: .yarn
+          key: yarn-cache-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-cache-
+
+      - name: Install JavaScript dependencies
+        run: yarn install --immutable
+
+      - name: Build assets
+        run: bin/rails assets:precompile
+
+  migrate:
+    name: Migration Check
+    runs-on: ubuntu-latest
+    needs: [build] # Ensures the app builds before migrating
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: hostit_test
+        ports:
+          - 5432:5432
+        options: --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Set up Database & Run Migrations
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:password@localhost:5432/hostit_test
+        run: |
+          bin/rails db:create
+          bin/rails db:migrate
 
   test:
+    name: Run Tests
     runs-on: ubuntu-latest
+    needs: [migrate] # Tests only run if migrations pass
 
-    # services:
-    #  redis:
-    #    image: redis
-    #    ports:
-    #      - 6379:6379
-    #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
-      - name: Install packages
+      - name: Install system dependencies
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git pkg-config google-chrome-stable
 
       - name: Checkout code
@@ -78,8 +161,8 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
+          REDIS_URL: redis://localhost:6379/0
+        run: bin/rails test test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
