@@ -86,6 +86,13 @@ jobs:
       - name: Verify Yarn version
         run: yarn --version
 
+      - name: Yarn cache
+        uses: actions/cache@v3
+        with:
+          path: .yarn
+          key: yarn-cache-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-cache-
+
       - name: Install JavaScript dependencies
         run: yarn install --immutable
 
