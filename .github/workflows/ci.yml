@@ -87,7 +87,7 @@ jobs:
         run: yarn --version
 
       - name: Install JavaScript dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Build assets
         run: bin/rails assets:precompile
