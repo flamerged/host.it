@@ -77,6 +77,15 @@ jobs:
           node-version: 20
           cache: yarn
 
+      - name: Enable Corepack (for Yarn 4.x support)
+        run: corepack enable
+
+      - name: Use correct Yarn version (4.6.0)
+        run: corepack use yarn@4.6.0
+
+      - name: Verify Yarn version
+        run: yarn --version
+
       - name: Install JavaScript dependencies
         run: yarn install --frozen-lockfile
 
