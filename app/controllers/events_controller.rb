@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_event, only: %i[show edit update destroy]
-  skip_after_action :verify_policy_scoped
+  after_action :verify_authorized
 
   def show
     authorize @event

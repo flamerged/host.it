@@ -1,7 +1,9 @@
 class InvitationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_invitation, only: [:update, :destroy]
-  before_action :find_event, only: [:index, :create]
+  before_action :find_invitation, only: %i[update destroy]
+  before_action :find_event, only: %i[index create]
+  after_action :verify_policy_scoped, only: :index, unless: :skip_pundit?
+  after_action :verify_authorized, except: :index, unless: :skip_pundit?
 
   def index
     @invitations = Invitation.where(event: @event)
@@ -11,7 +13,6 @@ class InvitationsController < ApplicationController
     authorize @invitation
     @invitation.status = params[:status]
     if @invitation.save
-      
     else
       flash.alert = "Error changing invitation status"
     end
@@ -25,14 +26,14 @@ class InvitationsController < ApplicationController
     @invitation.receiver = User.find_by(email: @invitation.receiver_email)
     @invited_already = Invitation.where(event: @event).find_by(receiver_email: @invitation.receiver_email)
     if @invited_already
-      render json: { success: false, errors: @invitation.errors.messages }, status: :unprocessable_entity 
+      render json: { success: false, errors: @invitation.errors.messages }, status: :unprocessable_entity
     elsif @invitation.receiver_email == current_user.email
-      render json: { success: false, errors: @invitation.errors.messages }, status: :unprocessable_entity 
+      render json: { success: false, errors: @invitation.errors.messages }, status: :unprocessable_entity
     else
       if @invitation.save
         render json: { invitation: @invitation }
       else
-        render json: { success: false, errors: @invitation.errors.messages }, status: :unprocessable_entity 
+        render json: { success: false, errors: @invitation.errors.messages }, status: :unprocessable_entity
       end
     end
   end

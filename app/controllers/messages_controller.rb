@@ -1,4 +1,6 @@
 class MessagesController < ApplicationController
+  after_action :verify_authorized, except: :index, unless: :skip_pundit?
+
   def create
     @event = Event.find(params[:event_id])
     message = Message.new(strong_params)
@@ -10,14 +12,14 @@ class MessagesController < ApplicationController
         message.chatroom,
         render_to_string(partial: "messages/message", locals: { message: message })
       )
-    else 
+    else
       render "events/show"
       flash.alert = "Error: Message could not be sent."
     end
   end
 
   def destroy
-    message =  Message.find(params[:id])
+    message = Message.find(params[:id])
     message.destroy
   end
 
