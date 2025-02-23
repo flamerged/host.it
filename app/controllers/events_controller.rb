@@ -1,6 +1,7 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_event, only: [:show, :edit, :update, :destroy]
+  before_action :find_event, only: %i[show edit update destroy]
+  skip_after_action :verify_policy_scoped
 
   def show
     authorize @event
@@ -8,11 +9,7 @@ class EventsController < ApplicationController
     @invitation = Invitation.new
     @invitations = @event.invitations.order(created_at: :desc)
     @message = Message.new
-    @marker = {
-      lat: @event.latitude,
-      lng: @event.longitude,
-      image_url: helpers.asset_url('marker.svg')
-    };
+    @marker = { lat: @event.latitude, lng: @event.longitude, image_url: helpers.asset_url("marker.svg") }
   end
 
   def new

@@ -45,6 +45,8 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
+  config.port = ENV.fetch("APP_PORT", 3001)
+
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
