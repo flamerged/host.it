@@ -1,0 +1,21 @@
+.event-error {
+  display: flex;
+  align-items: center;
+  margin-bottom: 50px;
+  flex-direction: column;
+  background-color: $beige;
+  width: fit-content;
+  margin: 0 auto 50px;
+  padding: 48px;
+  border-radius: 2px;
+
+  i {
+    color: $violet;
+    font-size: 100px;
+  }
+
+  .event-error-message {
+    font-size: 3rem;
+    margin-top: 24px;
+  }
+}

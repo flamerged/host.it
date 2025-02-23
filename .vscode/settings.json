@@ -5,7 +5,12 @@
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
   },
   "yaml.format.enable": true,
   "workbench.colorCustomizations": {
@@ -16,5 +21,13 @@
     "titleBar.activeBackground": "#2D1A4A",
     "titleBar.activeForeground": "#ffffff",
     "panel.background": "#2D1A4A"
+  },
+  "[ruby]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[erb]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "aliariff.vscode-erb-beautify"
   }
 }
