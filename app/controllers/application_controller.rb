@@ -2,10 +2,6 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   include Pundit::Authorization
 
-  after_action :verify_authorized, except: :index, unless: :skip_pundit?
-
-  skip_after_action :verify_authorized, if: :devise_controller?
-
   def default_url_options
     { host: ENV["DOMAIN"] || "localhost:3000" }
   end
