@@ -1,0 +1,13 @@
+<div class="filter-row">
+  <div class="filter-content">
+    <%= form_tag(dashboard_index_path, method: :get, class: "filter-form") do %>
+      <%= check_box_tag 'filtering[]', 'hosting', params[:filtering].try(:include?, ("hosting")), class: "checkbox-hosting" %>
+      <%= label_tag "HOSTING", nil, id: "filter-label-hosting" %>
+      <%= check_box_tag 'filtering[]', 'accepted', params[:filtering].try(:include?, ("accepted")), class: "checkbox-accepted" %>
+      <%= label_tag "ATTENDING", nil, id: "filter-label-accepted" %>
+      <%= check_box_tag 'filtering[]', 'pending', params[:filtering].try(:include?, ("pending")), class: "checkbox-pending" %>
+      <%= label_tag "PENDING", nil, id: "filter-label-pending" %>
+      <%= submit_tag "Filter", class:'button-filter' %>
+    <% end %>
+  </div>
+</div>

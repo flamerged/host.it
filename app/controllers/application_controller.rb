@@ -1,4 +1,18 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
+  before_action :authenticate_user!
+  include Pundit::Authorization
+
+  after_action :verify_authorized, except: :index, unless: :skip_pundit?
+
+  skip_after_action :verify_authorized, if: :devise_controller?
+
+  def default_url_options
+    { host: ENV["DOMAIN"] || "localhost:3000" }
+  end
+
+  private
+
+  def skip_pundit?
+    devise_controller? || params[:controller] =~ /(^(rails_)?admin)|(^pages$)/
+  end
 end

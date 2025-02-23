@@ -15,6 +15,8 @@ Rails.application.configure do
   # Enable server timing.
   config.server_timing = true
 
+  config.assets.enabled = true
+
   # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
   # Run rails dev:cache to toggle Action Controller caching.
   if Rails.root.join("tmp/caching-dev.txt").exist?
@@ -42,6 +44,8 @@ Rails.application.configure do
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
+
+  config.port = ENV.fetch("APP_PORT", 3001)
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load

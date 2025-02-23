@@ -1,0 +1,8 @@
+<div class="event-map">
+  <div id="map"
+    data-markers="<%= @marker.to_json %>"
+    data-mapbox-api-key="<%= ENV["MAPBOX_API_KEY"]%>">
+  </div>
+  <%= link_to "Open Google Maps", "https://www.google.com/maps/search/?api=1&query=#{@event.latitude},#{@event.longitude}", class: "button-map", target: "_blank" %>
+  <div class="section-header">The Location</div>
+</div>

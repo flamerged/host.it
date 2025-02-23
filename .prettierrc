@@ -3,6 +3,7 @@
   "trailingComma": "none",
   "singleQuote": true,
   "printWidth": 120,
+  "plugins": ["@prettier/plugin-ruby"],
   "overrides": [
     {
       "files": "*.yml",

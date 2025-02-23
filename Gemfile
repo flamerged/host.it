@@ -23,11 +23,16 @@ gem "sidekiq"
 gem "rake"
 
 gem 'geocoder'
-gem 'mapbox-gl-rails'
 gem 'faker'
 gem 'cloudinary'
 gem 'rspotify'
 gem 'devise'
+gem "simple_form"
+gem "meta-tags"
+gem "font-awesome-sass"
+gem 'pundit'
+gem 'cssbundling-rails'
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
@@ -57,7 +62,8 @@ group :development, :test do
   gem "dotenv-rails"
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
-
+  gem "erb_lint"
+  gem "syntax_tree"
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end
